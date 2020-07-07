@@ -4,7 +4,8 @@ import os
 from flask import jsonify
 import base64
 
-
+from pyzbar.pyzbar import decode
+from PIL import Image
 
 
 UPLOAD_FOLDER = '.'
@@ -40,7 +41,7 @@ def upload():
     if request.method == "POST":
         print("Setting test in here")
         content = request.json
-        print(content)
+        #print(content)
         img_b64 = content['data_url']
         img_b64 = img_b64.replace('data:image/png;base64,','')
         imgdata = base64.b64decode(img_b64)
@@ -48,7 +49,15 @@ def upload():
         with open(filename, 'wb') as f:
             f.write(imgdata)
         
-        return jsonify({'message': 'ok'})
+        # Decode bar
+        output = decode(Image.open('some_image.jpg'))
+        print(output)
+        code = ''
+        for item in output:
+            print("code --> ", item.data)
+            code = item.data
+
+        return jsonify({'message': 'ok', 'code': code})
 
 
 if __name__ == "__main__":

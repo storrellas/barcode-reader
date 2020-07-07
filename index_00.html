@@ -11,13 +11,11 @@
     #container {
       margin: 0px auto;
       width: 500px;
-      height: 375px;
+      height: 500px;
       border: 10px #333 solid;
     }
 
     #videoElement {
-      width: 500px;
-      height: 375px;
       background-color: #666;
     }
   </style>
@@ -25,7 +23,7 @@
 
 <body>
   <div id="container">
-    <video autoplay="true" id="videoElement"></video>
+    <video autoplay="true" id="videoElement"  width="640" height="480"></video>
   </div>
 
 
@@ -36,7 +34,7 @@
 
   <!-- Canvas element (screenshot) -->
   <div id="container" style="margin-top: 50px">
-    <canvas id="canvas" width="500px" height="375px"></canvas>
+    <canvas id="canvas"  width="640" height="480"></canvas>
   </div>
 
   <script>
@@ -77,6 +75,7 @@
             // Request was successful.
             success: function(response, textStatus, xhr) {
               console.log('Response: ', response);
+              alert(JSON.stringify(response))
             },
             error: function(xhr, textStatus, errorThrown) {
               // Some error occured.
