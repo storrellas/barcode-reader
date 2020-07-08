@@ -1,4 +1,4 @@
-from flask import Flask, flash, request, send_from_directory
+from flask import Flask, flash, request, send_from_directory, redirect
 from flask import Flask, flash, request, redirect, url_for
 import os
 from flask import jsonify
@@ -13,7 +13,7 @@ UPLOAD_FOLDER = '.'
 # set the project root directory as the static folder, you can set others.
 app = Flask(__name__, static_url_path='', static_folder='./')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+app.secret_key = "super secret key"
 
 @app.route('/', methods=['GET','POST'])
 def home():
@@ -32,9 +32,23 @@ def home():
             flash('No selected file')
             return redirect(request.url)
         if file:
-            filename = file.filename
+            filename = "123" + file.filename 
+            print("Saving to " +  filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return jsonify({'message': 'ok'})
+
+
+            # Decode bar
+            output = decode(Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename)))
+            print("output" , output)
+            code = b''
+            for item in output:
+                print("code --> ", item.data)
+                code = item.data
+
+
+            # Redirect to home            
+            return redirect('/?code='+code.decode() )
+            #return jsonify({'message': 'ok'})
 
 @app.route('/upload/', methods=['GET','POST'])
 def upload():
@@ -50,7 +64,7 @@ def upload():
             f.write(imgdata)
         
         # Decode bar
-        output = decode(Image.open('some_image.jpg'))
+        output = decode(Image.open('capture.jpg'))
         print(output)
         code = ''
         for item in output:
@@ -58,6 +72,34 @@ def upload():
             code = item.data
 
         return jsonify({'message': 'ok', 'code': code})
+
+@app.route('/upload/form', methods=['GET','POST'])
+def upload_form():
+    if request.method == "POST":
+        print(request.form)
+        image_file = request.form['file']
+        image_file.save(image_file.filename)
+        #image_file.save("sergi.jpg")
+        return redirect('/')
+        # print("Setting test in here")
+        # content = request.json
+        # #print(content)
+        # img_b64 = content['data_url']
+        # img_b64 = img_b64.replace('data:image/png;base64,','')
+        # imgdata = base64.b64decode(img_b64)
+        # filename = 'some_image.jpg'  # I assume you have a way of picking unique filenames
+        # with open(filename, 'wb') as f:
+        #     f.write(imgdata)
+        
+        # # Decode bar
+        # output = decode(Image.open('capture.jpg'))
+        # print(output)
+        # code = ''
+        # for item in output:
+        #     print("code --> ", item.data)
+        #     code = item.data
+        #return redirect('/')
+        #return jsonify({'message': 'ok', 'code': '123'})
 
 
 if __name__ == "__main__":

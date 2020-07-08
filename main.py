@@ -30,7 +30,7 @@ output = decode(Image.open('Barcode3.jpg'))
 for item in output:
     print("code --> ", item.data)
 """
-filename = 'foto3.jpg'
+filename = 'capture.jpg'
 print(" ")
 print(" ")
 print(" ")
