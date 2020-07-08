@@ -1,0 +1,1 @@
+nohup ./launch.sh &
