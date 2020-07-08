@@ -3,6 +3,8 @@
 <!-- https://gist.github.com/miguelmota/6403122 -->
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Display Webcam Stream</title>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -29,7 +31,7 @@
 
 <body>
   <div class="container">
-    <div class="row offset-4 col-4">
+    <div class="row offset-xs-4 col-xs-4">
       <form action="/" method="post" enctype = "multipart/form-data">
           <div class="form-group">
               <label for="exampleFormControlFile1">Example file input</label>
@@ -112,7 +114,6 @@
     };
     
     $(document).ready( () => {
-      console.log("sdfafds  ")
       let searchParams = new URLSearchParams(window.location.search)
       let code = searchParams.get('code')
       console.log("code", code)
