@@ -16,10 +16,10 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
   <style>
-    #container {
+    .frame {
       margin: 0px auto;
-      width: 500px;
-      height: 500px;
+      /* width: 500px;
+      height: 500px; */
       border: 10px #333 solid;
     }
 
@@ -50,27 +50,47 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div class="container-fluid mt-3">
+      <!-- Realtime video -->
+      <div id="container" class="row offset-md-4 col-md-4 frame">
+        <video autoplay="true" id="videoElement" style="width: 100%; height: 40vh"></video>
+      </div>
+      
+      <!-- Capture button -->
+      <div id="container" class="row offset-md-4 col-md-4 mt-3">
+        <div class="text-center container">
+            <button id="capture-btn" type="button" class="btn btn-primary">Capture!</button>
+        </div>
+      </div>
+
+      <!-- Canvas -->
+      <div id="container" class="mt-3 row offset-md-4 col-md-4 frame">
+        <canvas id="canvas"  style="width: 100%; height: 40vh"></canvas>
+      </div>
 
     </div>
 
+
   <!-- Realtime video -->
-  <div id="container" class="mt-3">
-    <video autoplay="true" id="videoElement"  width="640" height="480"></video>
-  </div>
+
+
+  <!-- <div id="container" class="mt-3">
+    
+    <video autoplay="true" id="videoElement" width="640" height="480"></video>
+  </div> -->
 
 
   <!-- Capture button -->
-  <div style="width: 100%; height: 10px;text-align: center; margin-top: 10px">
+  <!-- <div style="width: 100%; height: 10px;text-align: center; margin-top: 10px">
       <button id="capture-btn">Capture!</button>
-  </div>
+  </div> -->
 
   <!-- Canvas element (screenshot) -->
-  <div id="container" style="margin-top: 50px">
+  <!-- <div id="container" style="margin-top: 50px">
     <canvas id="canvas"  width="640" height="480"></canvas>
-  </div>
+  </div> -->
 
-  <script>
+  <script type="text/javascript">
     // Initialise Video
     var video = document.querySelector("#videoElement");
     if (navigator.mediaDevices.getUserMedia) {
@@ -83,38 +103,53 @@
         });
     }
 
-    // Send image with AJAX
-    var captureBtn = document.querySelector("#capture-btn")
-    var canvas = document.querySelector("#canvas");
-    var ctx = canvas.getContext('2d');
+    // See: https://stackoverflow.com/questions/23104582/scaling-an-image-to-fit-on-canvas
+    function drawImageScaled(img, ctx) {
+      var canvas = ctx.canvas ;
+      var hRatio = canvas.width  / img.videoWidth    ;
+      var vRatio =  canvas.height / img.videoHeight  ;
+      var ratio  = Math.min ( hRatio, vRatio );
+      var centerShift_x = ( canvas.width - img.videoWidth*ratio ) / 2;
+      var centerShift_y = ( canvas.height - img.videoHeight*ratio ) / 2;  
+      
+      ctx.clearRect(0,0,canvas.width, canvas.height);
+      ctx.drawImage(img, 0,0, img.videoWidth, img.videoHeight,
+                          0,0,img.videoWidth*hRatio, img.videoHeight*vRatio);  
+    }
+
+    // Send image with AJAX    
+    const captureBtn = document.querySelector("#capture-btn")
     captureBtn.onclick = function () {
-          //that.capture();
-          console.log("Capture button ...")
-          ctx.drawImage(video, 0, 0)
 
-          // Grab screenshot
-          dataURL = canvas.toDataURL('image/png');
+      // Draw image to canvas
+      const canvas = document.querySelector("#canvas");
+      const ctx = canvas.getContext('2d');
+      //ctx.drawImage(video, 0, 0)
+      drawImageScaled(video, ctx)
 
-          $.ajax({
-            url: '/upload/',
-            type: 'POST',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({ 'data_url': dataURL }),
-            complete: function(xhr, textStatus) {
-            // Request complete.
-            },
-            // Request was successful.
-            success: function(response, textStatus, xhr) {
-              console.log('Response: ', response);
-              alert(JSON.stringify(response))
-            },
-            error: function(xhr, textStatus, errorThrown) {
-              // Some error occured.
-              console.log('Error: ', errorThrown);
-              imageURLInput.value = 'An error occured.';
-            }
-          });
+      // Grab screenshot
+      dataURL = canvas.toDataURL('image/png');
+
+      // $.ajax({
+      //   url: '/upload/',
+      //   type: 'POST',
+      //   contentType: 'application/json',
+      //   dataType: 'json',
+      //   data: JSON.stringify({ 'data_url': dataURL }),
+      //   complete: function(xhr, textStatus) {
+      //   // Request complete.
+      //   },
+      //   // Request was successful.
+      //   success: function(response, textStatus, xhr) {
+      //     console.log('Response: ', response);
+      //     alert(JSON.stringify(response))
+      //   },
+      //   error: function(xhr, textStatus, errorThrown) {
+      //     // Some error occured.
+      //     console.log('Error: ', errorThrown);
+      //     imageURLInput.value = 'An error occured.';
+      //   }
+      // });
     };
     
   </script>
