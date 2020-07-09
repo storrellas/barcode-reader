@@ -15,10 +15,17 @@ app = Flask(__name__, static_url_path='', static_folder='./')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = "super secret key"
 
+#########################
+## home
+# GET:  Return index.html
+# POST: Typical form POST with redirect as response
+#########################
 @app.route('/', methods=['GET','POST'])
 def home():
     if request.method == "GET":
 	    return app.send_static_file('index.html')
+
+
     if request.method == "POST":
         # check if the post request has the file part
         if 'file' not in request.files: 
@@ -49,8 +56,13 @@ def home():
             return redirect('/?code='+code.decode() )
             #return jsonify({'message': 'ok'})
 
-@app.route('/upload/', methods=['GET','POST'])
-def upload():
+
+#########################
+## upload
+# POST: upload with base64 POST JSON
+#########################
+@app.route('/upload/base64/', methods=['GET','POST'])
+def upload_base64():
     if request.method == "POST":
         print("Setting test in here")
         content = request.json
@@ -71,14 +83,14 @@ def upload():
 
         return jsonify({'message': 'ok', 'code': code})
 
-@app.route('/upload/form', methods=['GET','POST'])
+@app.route('/form/', methods=['GET','POST'])
 def upload_form():
     if request.method == "POST":
         image_file = request.form['file']
         image_file.save(image_file.filename)
         return redirect('/')
 
-@app.route('/upload/ajax/', methods=['GET','POST'])
+@app.route('/form/ajax/', methods=['GET','POST'])
 def upload_form_ajax():
     if request.method == "POST":
         # check if the post request has the file part
@@ -95,12 +107,10 @@ def upload_form_ajax():
             filename = "123" + file.filename 
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-
             # Decode bar
             output = decode(Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename)))
             code_list = []
             for item in output:
-                print("code --> ", item.data)
                 code_list.append( item.data.decode() ) 
 
             # Redirect to home            

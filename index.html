@@ -69,63 +69,17 @@
   <script type="text/javascript">
     $(document).ready(() => {
 
-      
-      // // Check whether URL params in path
-      // let searchParams = new URLSearchParams(window.location.search)
-      // let code = searchParams.get('code')
-      // if (code !== undefined && code !== null) {
-      //   //alert("code --> " + code)
-      //   if( code.length > 0){
-      //     $('.alert').text('Code retrieved: ' + code)
-      //     $('.alert').removeClass("d-none");
-      //   }
-      // }
-      /**/
-      /*
-      $('.btn-submit2').click( () => {
-        console.log("Clicking button ...")
-
-              // this is the id of the form
-      $("#form-submit").submit(function(e) {
-
-        e.preventDefault(); // avoid to execute the actual submit of the form.
-
-          var form = $(this);
-          var url = form.attr('action');
-
-          console.log("Submitting form ...")
-          // $.ajax({
-          //       type: "POST",
-          //       url: url,
-          //       data: form.serialize(), // serializes the form's elements.
-          //       success: function(data)
-          //       {
-          //           alert(data); // show response from the php script.
-          //       }
-          //     });
-
-
-        });
-      })
-      /**/
-
-      
+            
       // this is the id of the form
       $("#form-submit").submit(function(e) {
 
         e.preventDefault(); // avoid to execute the actual submit of the form.
-
-        // var form = $(this);
-        // var url = form.attr('action');
-        // var url = "https://192.168.1.201/upload/ajax/"
-        // console.log("Submitting form ...", url)
-        // console.log("Submitting form ...", form.serialize())
         
         // Make the AJAX call
         var formData = new FormData(this);
         $.ajax({
               type: "POST",
-              url: "/upload/ajax/",
+              url: "/form/ajax/",
               data: formData, // serializes the form's elements.
               success: function(data){
                   //alert(JSON.stringify(data)); // show response from the php script.
