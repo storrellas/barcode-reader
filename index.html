@@ -131,8 +131,13 @@
                   //alert(JSON.stringify(data)); // show response from the php script.
                   //console.log( data.message )
                   if( data.message == 'ok'){
-                      $('.alert').html('<b>Code retrieved:</b><br>' + data.code_list.join('<br>'))
-                      $('.alert').removeClass("d-none");
+                    if(data.code_list.length > 0){
+                      $('.alert').html('<b>Code retrieved:</b><br>' + data.code_list.join('<br>'))                      
+                    }else{
+                      $('.alert').html('<b>Code retrieved:</b><br> No code detected' )
+                    }
+                    $('.alert').removeClass("d-none");
+                      
                   }
               },
               cache: false,
