@@ -20,7 +20,6 @@ def home():
     if request.method == "GET":
 	    return app.send_static_file('index.html')
     if request.method == "POST":
-        print("MyTest")
         # check if the post request has the file part
         if 'file' not in request.files: 
             flash('No file part')
@@ -101,6 +100,40 @@ def upload_form():
         #return redirect('/')
         #return jsonify({'message': 'ok', 'code': '123'})
 
+@app.route('/upload/ajax/', methods=['GET','POST'])
+def upload_form_ajax():
+    print("upload_form_ajax")
+    print("upload_form_ajax", request.method)
+    if request.method == "POST":
+        # check if the post request has the file part
+        if 'file' not in request.files: 
+            flash('No file part')
+            return jsonify({'message': 'failed - no file part'})
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            #return redirect(request.url)
+            return jsonify({'message': 'failed - no selected file'})
+        if file:
+            filename = "123" + file.filename 
+            print("Saving to " +  filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+
+            # Decode bar
+            output = decode(Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename)))
+            print("output" , output)
+            code = b''
+            for item in output:
+                print("code --> ", item.data)
+                code = item.data
+
+            print("Uploading ajax")
+
+            # Redirect to home            
+            return jsonify({'message': 'ok'})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
