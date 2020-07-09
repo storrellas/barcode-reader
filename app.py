@@ -125,15 +125,15 @@ def upload_form_ajax():
             # Decode bar
             output = decode(Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename)))
             print("output" , output)
-            code = b''
+            code_list = []
             for item in output:
                 print("code --> ", item.data)
-                code = item.data
+                code_list.append( item.data.decode() ) 
 
             print("Uploading ajax")
 
             # Redirect to home            
-            return jsonify({'message': 'ok', 'code': code.decode() })
+            return jsonify({'message': 'ok', 'code_list': code_list })
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)

@@ -45,7 +45,7 @@
   </nav>
 
   <div class="container-fluid">
-    <div class="row offset-md-4 col-md-4">
+    <div class="row offset-md-3 col-md-6 mt-3">
       <form id="form-submit" action="/" method="post" enctype="multipart/form-data">
         <div class="form-group">
           <label for="exampleFormControlFile1">Please make a picture with the camer and submit</label>
@@ -115,23 +115,23 @@
 
         e.preventDefault(); // avoid to execute the actual submit of the form.
 
-        var form = $(this);
-        var url = form.attr('action');
-        var url = "https://192.168.1.201/upload/ajax/"
-        console.log("Submitting form ...", url)
-        console.log("Submitting form ...", form.serialize())
-
+        // var form = $(this);
+        // var url = form.attr('action');
+        // var url = "https://192.168.1.201/upload/ajax/"
+        // console.log("Submitting form ...", url)
+        // console.log("Submitting form ...", form.serialize())
+        
+        // Make the AJAX call
         var formData = new FormData(this);
         $.ajax({
               type: "POST",
-              url: url,
+              url: "/upload/ajax/",
               data: formData, // serializes the form's elements.
-              success: function(data)
-              {
+              success: function(data){
                   //alert(JSON.stringify(data)); // show response from the php script.
-                  console.log( data.message )
+                  //console.log( data.message )
                   if( data.message == 'ok'){
-                      $('.alert').text('Code retrieved: ' + data.code)
+                      $('.alert').html('<b>Code retrieved:</b><br>' + data.code_list.join('<br>'))
                       $('.alert').removeClass("d-none");
                   }
               },
