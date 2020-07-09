@@ -133,7 +133,7 @@ def upload_form_ajax():
             print("Uploading ajax")
 
             # Redirect to home            
-            return jsonify({'message': 'ok'})
+            return jsonify({'message': 'ok', 'code': code.decode() })
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)

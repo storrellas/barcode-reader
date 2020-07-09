@@ -70,16 +70,16 @@
     $(document).ready(() => {
 
       
-      // // Check whether URL params in path
-      // let searchParams = new URLSearchParams(window.location.search)
-      // let code = searchParams.get('code')
-      // if (code !== undefined && code !== null) {
-      //   //alert("code --> " + code)
-      //   if( code.length > 0){
-      //     $('.alert').text('Code retrieved: ' + code)
-      //     $('.alert').removeClass("d-none");
-      //   }
-      // }
+      // Check whether URL params in path
+      let searchParams = new URLSearchParams(window.location.search)
+      let code = searchParams.get('code')
+      if (code !== undefined && code !== null) {
+        //alert("code --> " + code)
+        if( code.length > 0){
+          $('.alert').text('Code retrieved: ' + code)
+          $('.alert').removeClass("d-none");
+        }
+      }
       /**/
       /*
       $('.btn-submit2').click( () => {
@@ -109,7 +109,7 @@
       })
       /**/
 
-      
+      /*
       // this is the id of the form
       $("#form-submit").submit(function(e) {
 
@@ -128,16 +128,11 @@
               data: formData, // serializes the form's elements.
               success: function(data)
               {
-                  //alert(JSON.stringify(data)); // show response from the php script.
-                  console.log( data.message )
-                  if( data.message == 'ok'){
-                      $('.alert').text('Code retrieved: ' + data.code)
-                      $('.alert').removeClass("d-none");
-                  }
+                  alert(JSON.stringify(data)); // show response from the php script.
               },
               cache: false,
-              contentType: false,
-              processData: false
+        contentType: false,
+        processData: false
             });
 
 
