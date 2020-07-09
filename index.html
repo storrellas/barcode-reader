@@ -21,6 +21,10 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
 
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+  <styl
+
 </head>
 
 <body>
@@ -53,10 +57,10 @@
         </div>
         
         <div class="alert alert-primary d-none" role="alert">Failed to retrieve code</div>
-        <!-- <div class="alert alert-danger d-none" role="alert">Failed to retrieve code</div> -->
+        <div class="alert alert-danger d-none" role="alert">No file selected</div>
 
         <div class="text-center">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit </button><i class="ml-3 invisible spinner fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>
             <!-- <button type="button" class="btn-submit2 btn btn-primary">Submit2</button> -->
         </div>        
       </form>
@@ -74,6 +78,20 @@
       $("#form-submit").submit(function(e) {
 
         e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        // Check if file is full
+        if(!$("#pictureFile").val()){
+          console.log("File is empty")
+          $(".alert-danger").removeClass("d-none");
+          return
+        }
+        
+
+        // Add loading
+        $('.spinner').removeClass('invisible')
+        $('.alert').addClass("d-none");
+        $(".alert-danger").addClass("d-none");
+        
         
         // Make the AJAX call
         var formData = new FormData(this);
@@ -86,12 +104,13 @@
                   //console.log( data.message )
                   if( data.message == 'ok'){
                     if(data.code_list.length > 0){
-                      $('.alert').html('<b>Code retrieved:</b><br>' + data.code_list.join('<br>'))                      
+                      $('.alert-primary').html('<b>Code retrieved:</b><br>' + data.code_list.join('<br>'))                      
                     }else{
-                      $('.alert').html('<b>Code retrieved:</b><br> No code detected' )
+                      $('.alert-primary').html('<b>Code retrieved:</b><br> No code detected' )
                     }
-                    $('.alert').removeClass("d-none");
-                      
+                    $('.alert-primary').removeClass("d-none");
+                    // Remove loading
+                    $('.spinner').addClass('invisible')
                   }
               },
               cache: false,
